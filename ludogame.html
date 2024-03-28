@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        button{
+           padding:5px 10px;
+           font-size:20px;
+           border-radius:10px;
+           background-color:gold;
+           font-weight:bold;
+           cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+   <center> 
+       <canvas id="k" height="600px" width="600px" style="border:2px solid;"></canvas><br>
+       <button onClick="firstClint()">Clint-1</button>
+       <button>Value</button>
+       <button onClick="firstClint2()">Clint-2</button>
+
+       <img src="ludo2.png" alt="" height="600px",width="600px" style="display:none;">
+   </center>
+
+   <script>
+       let ctx = document.querySelector("#k").getContext("2d"),index=0;
+       let color = ["red","green","blue","yellow"];
+
+       let midxy1 = [40,280,280,40,280,360,360,280];
+       let midxy2 = [40,240,320,40,240,520,520,320];
+       let midwh = [200,40,40,200,40,200,200,40]; 
+       for(var i=0;i<midxy1.length;i+=2){
+        ctx.beginPath();
+        ctx.fillStyle= color[index++];   
+        ctx.fillRect(midxy1[i],midxy1[i+1],midwh[i],midwh[i+1]);
+        ctx.fillRect(midxy2[i],midxy2[i+1],40,40);
+        ctx.closePath();
+
+       }
+   
+       let y=40,x=0;
+       for(var i=0;i<15;i++){
+          ctx.moveTo(0,y);
+          ctx.lineTo(600,y);
+          ctx.moveTo(x,0);
+          ctx.lineTo(x,600);
+          y += 40;
+          x += 40;  
+       }
+       ctx.stroke();
+
+       let data = [0,0,360,0,0,360,360,360];
+       index=0;
+       for(var i=0;i<7;i+=2){
+            ctx.beginPath();
+            ctx.fillStyle = color[index];
+            ctx.fillRect(data[i],data[i+1],240,240);
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.fillStyle = 'white';
+            ctx.strokeStyle="black";
+            ctx.fillRect(data[i]+40,data[i+1]+40,160,160);
+            ctx.strokeRect(data[i]+40,data[i+1]+40,160,160);
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.fillStyle=color[index++];
+            ctx.fillRect((data[i]+60),(data[i+1]+60),40,40); 
+            ctx.fillRect(data[i]+140,data[i+1]+60,40,40); 
+            ctx.fillRect((data[i]+60),(data[i+1]+140),40,40); 
+            ctx.fillRect(data[i]+140,data[i+1]+140,40,40); 
+            ctx.closePath();
+       }
+
+       let moveto = [240,240,240,240,240,360,360,240];
+       let lineto = [240,360,360,240,360,360,360,360];
+       let star = [91,368,251,128,491,288,331,528];
+       index=0;
+       for(var i=0;i<moveto.length;i+=2){
+         ctx.beginPath();
+         ctx.moveTo(moveto[i],moveto[i+1]);
+         ctx.lineTo(300,300);
+         ctx.lineTo(lineto[i],lineto[i+1]);
+         ctx.closePath();
+         ctx.fillStyle=color[index++];
+         ctx.fill();
+
+         ctx.fillStyle="black";
+         ctx.font="bold 3em arial";
+         ctx.fillText("*",star[i],star[i+1]);
+       }
+        ctx.lineWidth = 3; 
+        ctx.font = "bold 2em arial";
+        ctx.fillText("HOME",252,310);
+
+        
+          var posiX=50,posiY=250,ind=0,flag=0,n;
+          var pathX = [40,80,120,160,200,240,240,240,240,240,240,280,320,320,320,320,320,320,360,400,440,480,520,560,560,560,520,480,440,400,360,320,320,320,320,320,320,280,240,240,240,240,240,240,200,160,120,80,40,0,0,40,80,120,160,200,240];
+          var pathY = [240,240,240,240,240,200,160,120,80,40,0,0,0,40,80,120,160,200,240,240,240,240,240,240,280,320,320,320,320,320,320,360,400,440,480,520,560,560,560,520,480,440,400,360,320,320,320,320,320,320,280,280,280,280,280,280,280];  
+          let img=document.querySelector("img");
+          ctx.fillRect(70,150,20,20);
+          //ctx.drawImage(imgs,70,150,20,20,70,150,20,20);    
+          function firstClint(){
+
+
+               let random = Math.floor(Math.random()*10)-6;
+               random=random<0?(random*-1):random;
+               random = random==0?(random+6):random;
+               document.querySelectorAll("button")[1].innerText = random;     
+               if(random==6&&flag==0){
+                    ctx.fillRect(50,250,20,20);
+                    //ctx.drawImage(imgs,500,150,20,20,70,150,20,20);
+
+                    ctx.drawImage(img,60,140,40,40,60,140,40,40); 
+                    flag=1;
+               }else if(flag==1){
+                  n=ind;
+                  ind += random;
+                  var id = window.setInterval(()=>{
+                     document.querySelectorAll("button")[0].disabled=true;
+                     ctx.clearRect(posiX+10,posiY+10,20,20); 
+                     ctx.drawImage(img,posiX,posiY,40,40,posiX,posiY,40,40); 
+                     posiX = pathX[n];
+                     posiY = pathY[n];
+                     ctx.fillRect(pathX[n]+10,pathY[n]+10,20,20);
+                       
+
+                   
+
+                     //ctx.drawImage(imgs,800,150,20,20,pathX[n]+10,pathY[n]+10,20,20);
+
+                     n++;
+                     if(n==ind){
+                     window.clearInterval(id);
+                  document.querySelectorAll("button")[0].disabled=false;
+                  }
+                     
+
+
+                  if(random!=6){
+             document.querySelectorAll("button")[0].disabled=true;
+             document.querySelectorAll("button")[2].disabled=false;
+            }
+
+
+                  if(ind>=57){
+                     ctx.clearRect(posiX+10,posiY+10,20,20); 
+                     ctx.drawImage(img,posiX,posiY,40,40,posiX,posiY,40,40);
+            console.log(ind,ind1);
+            document.querySelectorAll("button")[0].disabled=true;
+            document.querySelectorAll("button")[2].disabled=true;
+            ctx.font="bold 2em arial";
+            ctx.strokeStyle="white";
+            ctx.strokeText("Game Complete",180,305);
+          }
+           
+
+          if(random!=6){
+             document.querySelectorAll("button")[0].disabled=true;
+             document.querySelectorAll("button")[2].disabled=false;
+            }
+
+
+                  },300);
+
+             }
+
+            
+             
+          }   
+
+
+
+         var posiX1=530,posiY1=330,ind1=0,flag1=0,n1;
+          var pathX1= [480,440,400,360,320,320,320,320,320,320,280,240,240,240,240,240,240,200,160,120,80,40,0,0,0,40,80,120,160,200,240,240,240,240,240,240,280,320,320,320,320,320,320,360,400,440,480,520,560,560,520,480,440,400,360,320];
+          var pathY1 = [320,320,320,320,360,400,440,480,520,560,560,560,520,480,440,400,360,320,320,320,320,320,320,280,240,240,240,240,240,240,200,160,120,80,40,0,0,0,40,80,120,160,200,240,240,240,240,240,240,280,280,280,280,280,280,280];
+console.log(pathX.length,pathY.length,pathX1.length,pathY1.length);
+          let img1=document.querySelector("img");
+         
+           ctx.fillRect(510,430,20,20);
+
+        //  ctx.drawImage(img,510,430,20,20,pathX[n]+10,pathY[n1]+10,20,20);
+          //ctx.fillText('c1',510,430);
+          
+          function firstClint2(){
+               let random1 = Math.floor(Math.random()*10)-6;
+               random1=random1<0?(random1*-1):random1;
+               random1 = random1==0?(random1+6):random1;
+               document.querySelectorAll("button")[1].innerText = random1;        
+               if(random1==6&&flag1==0){
+                   ctx.fillRect(530,330,20,20);
+
+                 //  ctx.drawImage(img1,510,430,20,20,530,330,20,20);
+
+                    ctx.drawImage(img1,490,420,40,40,490,420,40,40); 
+                    flag1=1;
+               }else if(flag1==1){
+                  n1=ind1;
+                  ind1 += random1;
+                  var id1 = window.setInterval(()=>{
+                     document.querySelectorAll("button")[2].disabled=true;
+                     ctx.clearRect(posiX1+10,posiY1+10,20,20); 
+                     ctx.drawImage(img1,posiX1,posiY1,40,40,posiX1,posiY1,40,40); 
+                     posiX1 = pathX1[n1];
+                     posiY1 = pathY1[n1];
+                     
+                     ctx.fillRect(pathX1[n1]+10,pathY1[n1]+10,20,20);
+                   //  ctx.drawImage(img1,510,430,20,20,pathX1[n1]+10,pathY1[n1]+10,20,20);
+
+                     n1++;
+                     if(n1==ind1){
+                     window.clearInterval(id1);
+                  document.querySelectorAll("button")[2].disabled=false;
+                  }
+
+
+
+                  if(random1!=6){
+             document.querySelectorAll("button")[0].disabled=false;
+             document.querySelectorAll("button")[2].disabled=true;
+            }
+
+
+                  if(ind1>=57){
+                     ctx.clearRect(posiX1+10,posiY1+10,20,20); 
+                     ctx.drawImage(img1,posiX1,posiY1,40,40,posiX1,posiY1,40,40);
+            document.querySelectorAll("button")[0].disabled=true;
+            document.querySelectorAll("button")[2].disabled=true;
+            ctx.font="bold 2em arial";
+            ctx.strokeStyle="white";
+            ctx.strokeText("Game Complete",180,305);
+          }
+
+
+        
+
+                  },300);
+                
+             }
+
+             if(random1!=6){
+             document.querySelectorAll("button")[0].disabled=false;
+             document.querySelectorAll("button")[2].disabled=true;
+            }
+          }  
+
+         
+   </script>
+</body>
+</html>
